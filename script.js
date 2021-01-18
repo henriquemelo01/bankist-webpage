@@ -93,7 +93,6 @@ const header = document.querySelector('.header'); // Returns the first element t
 const button = document.getElementsByClassName('.btn'); // HTML collections
 const allSections = document.querySelectorAll('.section'); // Return a node list that contains all elements
 
-const section1 = document.getElementById('section--1');
 const allButtons = document.getElementsByTagName('button');
 // console.log(allButtons); // Return HTML Collection -> atualiza sempre que DOM muda. Isso é importante pois conseguimos deletar elementos da DOM programaticamente
 
@@ -115,6 +114,8 @@ const allButtons = document.getElementsByTagName('button');
 
 // Create DOM element
 const message = document.createElement('div');
+const btnLearnMore = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
 
 // Modifying DOM element
 message.classList.add('cookie-message');
@@ -193,3 +194,134 @@ console.log(link.getAttribute('href')); // #
 
 // Data Attributes (Element.dataset.att)
 console.log(imgFeature.dataset.src);
+
+// Classes
+const logo = document.querySelector('.nav__logo');
+logo.classList.add('class1', 'class2');
+logo.classList.remove('class1');
+logo.classList.toggle('class1'); // Remove class1 no elemento nav__logo se a mesma esta definida ou Add se class1 não esta definida
+console.log(logo.classList.contains('class1'));
+
+// Não use className para definir uma classe em um elemnto HTML, uma vez que ao setar esta propriedade toda classe será redefinida **
+
+// logo.className = "icon-logo";
+// console.log(logo);
+
+// ============================================
+
+// Implementing Smooth Scrolling: Quando clicar no botão Learn More, vamos percorrer a tela até a 1ª sessão (efeito de transição)
+
+// Add click event (event listner):
+btnLearnMore.addEventListener('click', function (e) {
+  // Maneira antiga de se fazer o Scrooling (Browser antigos suportam)
+
+  // Obter as coordenadas do elemento que vamos ser direcionado :
+
+  // Coordenadas em relação ao view port (toda parte visível do documento)
+
+  const s1coords = section1.getBoundingClientRect();
+  console.log(s1coords);
+
+  // ou:
+
+  console.log(e.target.getBoundingClientRect());
+
+  // OBS: e.target - aponta para o elemento que chamou o metodo addEventListner() (Equivalente ao .this)
+
+  // Posição em relação ao inicio da barragem de rolagem do navegador
+  console.log('Current Scroll (X/Y) : ', window.pageXOffset, pageYOffset);
+
+  // Coordenada Exata de um elemento: Coord elemento em relação ao view port + Coord barra de rolagem
+  /*
+  window.scrollTo(
+    s1coords.top + window.pageYOffset,
+    left: s1coords.left + window.pageXOffset,
+    behavior: 'smooth',
+  );
+
+  */
+
+  // Novo metodo para aplicar efeito de scroll
+  section1.scrollIntoView({ behavior: 'smooth' });
+
+  // section1.scrollIntoView({ behavior: 'smooth' });
+});
+
+// Type of events and event Handler: É um sinal gerado quando há uma interação com um elemento da DOM.
+
+// Mouse Enter + Mouse Leave events:
+const navMenu = document.querySelectorAll('.nav__link');
+
+// Hover effect using JS
+// navMenu.forEach(function (item) {
+//   item.addEventListener('mouseenter', () => (item.style.color = 'red'));
+
+//   item.addEventListener('mouseleave', () => (item.style.color = '#444444'));
+// });
+
+const print = () => {
+  console.log('Hello World!');
+  h1.removeEventListener('mouseenter', print);
+};
+
+const h1 = document.querySelector('h1');
+h1.addEventListener('mouseenter', print);
+
+// A forma abaixo de "ouvir" eventos não é muito utilizada (antiga)
+
+// h1.onmouseenter = () => console.log('Evento disparado usando onmouseenter ');
+
+// Vantagens de se utilizar .addEventListener():
+
+/*
+ - Pode-se atribuir mais de um evento para um mesmo elemento
+ - Podemos remover o eventhandler quando não precisamos mais. Ex: Quando queremos exeutar o evento apenas uma única vez 
+
+*/
+
+// JS events important properties ( Bubbling and Capturing) - Event propagation
+
+// Capturing Phase: Evento é gerado no root (Document) e viaja até o elemento que será alvo do evento percorrendo por todos seus parents.
+
+// Target phase: Assim que o evento "chegou" no elemento alvo, os eventos podem ser "ouvidos"
+
+// Bubbling: Após a target phase o evento retorna ao root. Isto implica na seguinte situação:
+
+// Quando atribuimos um eventhandler para dois elementos child e parent, por ex, add evento de click, ao clicarmos no elemento child, o evento será disparado para o pai e filho
+
+const navChild = document.querySelector('.nav__link');
+const nav = document.querySelector('.nav');
+
+const randomNumber = function () {
+  return Math.trunc(Math.random() * 255 + 1);
+};
+
+const randomColor = function () {
+  return `rgb(${randomNumber()},${randomNumber()},${randomNumber()})`;
+};
+
+navChild.addEventListener(
+  'click',
+  e => {
+    navChild.style.backgroundColor = randomColor();
+    console.log(e.target, e.currentTarget);
+
+    // Stop propagation
+    // e.stopPropagation();
+  },
+  true
+);
+
+// 3º parametro habilita o event handler na capturing phase - evento propaga na direção parent -> child , por padrão o metodo addEventListener tem o 3 parametro setado como false, assim o event handler é habilitado na fase de Bubbling , evento propaga na direção child -> parent
+
+// Ao clicar no elemento navChild tendo em vista a fase de bubbling, o event handler de nav também é ativado - propagaçaõ . Entretando, se clicarmos no elemento nav o mesmo efeito não ocorre para seu child. OBS: o event.target não é propagado, mas event.currenTarget === .this
+
+nav.addEventListener('click', e => {
+  nav.style.backgroundColor = randomColor();
+  console.log(e.target, e.currentTarget);
+});
+
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log(e.target, e.currentTarget);
+});
