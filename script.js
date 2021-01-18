@@ -79,20 +79,18 @@ Obs 2: Os metodos .querySelector() e .querySelectorAll() são comuns ao element 
 
 */
 
-// Selecting elements:
+// ==================================================
 
-// Select entire page:
-console.log(document.documentElement);
-console.log(document.head); // config document
-console.log(document.body); // elemens
+// DOM elements
+const header = document.querySelector('.header');
 
-// Select elements using css selectors: . (class) # (id)  *** + USADO
+// Learn More Efect
+const btnLearnMore = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
 
-// OBS: Os metodos .querySelector() e .querySelectorAll() são comuns ao element e ao document - Muito usado para selecionar child elements,...
-const header = document.querySelector('.header'); // Returns the first element that contains header class
-const button = document.getElementsByClassName('.btn'); // HTML collections
-const allSections = document.querySelectorAll('.section'); // Return a node list that contains all elements
+// ==================================================
 
+<<<<<<< HEAD
 const allButtons = document.getElementsByTagName('button');
 // console.log(allButtons); // Return HTML Collection -> atualiza sempre que DOM muda. Isso é importante pois conseguimos deletar elementos da DOM programaticamente
 
@@ -111,6 +109,9 @@ const allButtons = document.getElementsByTagName('button');
 // section1.insertAdjacentHTML('afterbegin', html);
 
 // Cookie Message:
+=======
+//Cookie Message:
+>>>>>>> 8725b5a8a9c2d34de66b7b2913cfd1246be8d009
 
 // Create DOM element
 const message = document.createElement('div');
@@ -122,76 +123,45 @@ message.classList.add('cookie-message');
 message.innerHTML =
   '"We use cookies for improved functionality and analytics. <button class = "btn btn--close-cookie">Got it!</button>"';
 
-// Insert DOM element
+// Insert DOM element (Add element before header as a sibling)
 
-// Element.prepend: Inserts nodes before the first child of node, while replacing strings in nodes with equivalent Text nodes.
-
-header.prepend(message);
-
-// Move element before last child
-header.append(message);
-
-// Clone Elements
-// header.append(message.cloneNode(true)); // clone element -> true = copy all child elements.
-
-// Add element before header as a sibling
-header.after(message);
-
-// Add element after header as a sibling
-// header.after(message);
-
-// Delete elements:
+header.before(message);
 
 document
   .querySelector('.btn--close-cookie')
   .addEventListener('click', () => message.remove());
-// Old Way: .message.parentElement.removeChild(message);
 
 // Styles; Element.style.propertie = "value0" - creating in line properties ** Prioridade Max de estilo
+
 message.style.backgroundColor = '#37383d';
 message.style.width = '120%';
-
-// Getting properties values (Só funciona para obter valores das propriedades in line, não funciona para obter os valores de propriedades definidas nas classes (CSS) )
-console.log(message.style.height); //
-console.log(message.style.backgroundColor); // rgb(55, 56, 61) - inline propertie
-
-// Getting all styles from HTML element
-
-// console.log(getComputedStyle(message));
-console.log(getComputedStyle(message).height);
-
-// Modifying class properties **
-
-// Como getComputedStyle(message).height retorna uma string que contém o valor da propriedade height
 message.style.height =
-  Number.parseFloat(getComputedStyle(message).height, 10) + 25 + 'px';
+  Number.parseFloat(getComputedStyle(message).height, 10) + 15 + 'px';
 
-console.log(message.style.height);
+// Obs: usando getComputedStyle(element) acessamos todos estilos do element, inclusive, aqueles que foram definidos no stylesheet (classe css)
 
-// Working with CSS variables
+// console.log(getComputedStyle(message).width);
+// console.log(message.width); // undefined
 
-// Select :root - The :root CSS pseudo-class matches the root element of a tree representing the document. In HTML, :root represents the <html> element and is identical to the selector html, except that its specificity is higher.
+message.style.margin = '2.5px';
 
-document.documentElement.style.setProperty('--color-primary', 'orangered');
+// ==================================================
 
-// Attributes
+// Implementing Smooth Scrolling: Quando clicar no botão Learn More, vamos percorrer a tela até a 1ª sessão (efeito de transição)
 
-// Read Standard attributes:
-const imgFeature = document.querySelector('.features__img');
+// Add click event (event listner):
+btnLearnMore.addEventListener('click', () =>
+  section1.scrollIntoView({ behavior: 'smooth' })
+);
 
-console.log(imgFeature.alt);
-console.log(imgFeature.src); // http://127.0.0.1:8080/img/digital-lazy.jpg
-console.log(imgFeature.getAttribute('src')); // img/digital-lazy.jpg
+// Hover effect using JS
 
-// Setting + getting Attribute: Using
-imgFeature.setAttribute('designer', 'Jonas');
-console.log(imgFeature.designer); // undefined não é uma propriedade padrão do elemento img
-console.log(imgFeature.getAttribute('designer')); // Jonas
+const navMenu = document.querySelectorAll('.nav__link');
 
-const link = document.querySelector('.nav__link--btn');
-console.log(link.href); // URL
-console.log(link.getAttribute('href')); // #
+navMenu.forEach(function (item) {
+  item.addEventListener('mouseenter', () => (item.style.color = 'red'));
 
+<<<<<<< HEAD
 // Data Attributes (Element.dataset.att)
 console.log(imgFeature.dataset.src);
 
@@ -324,4 +294,7 @@ nav.addEventListener('click', e => {
 document.querySelector('.nav__links').addEventListener('click', function (e) {
   this.style.backgroundColor = randomColor();
   console.log(e.target, e.currentTarget);
+=======
+  item.addEventListener('mouseleave', () => (item.style.color = '#444444'));
+>>>>>>> 8725b5a8a9c2d34de66b7b2913cfd1246be8d009
 });
